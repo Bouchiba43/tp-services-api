@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Microservices Dashboard</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <header>
+        <div class="header-title">
+          <span class="header-icon">⬡</span>
+          <div>
+            <h1>Microservices Architecture</h1>
+            <p class="header-sub">tp-microservices-nest — live request tracer</p>
+          </div>
+        </div>
+        <div class="header-status">
+          <span class="status-label">Services online:</span>
+          <span id="online-count" class="online-badge">checking…</span>
+        </div>
+      </header>
+
+      <div class="layout">
+        <!-- LEFT: diagram -->
+        <div class="panel diagram-panel">
+          <div class="panel-head">
+            <span>Architecture Diagram</span>
+            <div class="legend">
+              <span class="leg gateway">Gateway</span>
+              <span class="leg rest">REST</span>
+              <span class="leg grpc">gRPC</span>
+              <span class="leg kafka">Kafka</span>
+              <span class="leg graphql">GraphQL</span>
+              <span class="leg db">DB</span>
+              <span class="leg http">HTTP proxy</span>
+            </div>
+          </div>
+          <div id="diagram-wrap"></div>
+        </div>
+
+        <!-- RIGHT: controls + log -->
+        <div class="side-panel">
+          <div class="panel services-panel">
+            <div class="panel-head">Services</div>
+            <div id="service-cards"></div>
+          </div>
+
+          <div class="panel tests-panel">
+            <div class="panel-head">End-to-End Tests</div>
+            <div id="test-buttons"></div>
+          </div>
+
+          <!-- kafka live stream -->
+          <div class="panel kafka-panel">
+            <div class="panel-head kafka-head">
+              <span>Kafka / Notification Stream</span>
+              <span id="kafka-live-dot" class="kafka-live-dot"></span>
+            </div>
+            <div id="kafka-stream" class="kafka-body"></div>
+          </div>
+
+          <div class="panel log-panel">
+            <div class="panel-head">
+              <span>Activity Log</span>
+              <button class="btn-clear" id="btn-clear">Clear</button>
+            </div>
+            <div id="log" class="log-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
