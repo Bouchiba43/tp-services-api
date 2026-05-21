@@ -44,7 +44,7 @@ build:
 		npm run build --prefix $$svc --silent 2>&1 || exit 1; \
 	done
 	@echo "→ Building dashboard..."
-	@cd $(DASHBOARD_DIR) && pnpm build --silent 2>&1 || exit 1
+	@cd $(DASHBOARD_DIR) && pnpm --silent build 2>&1 || exit 1
 	@echo "Build complete."
 
 start: $(LOG_DIR) $(PID_DIR)
