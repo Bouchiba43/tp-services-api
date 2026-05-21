@@ -16,7 +16,7 @@ import { OrdersService } from './orders.service';
         options: {
           package: 'stock',
           protoPath: join(__dirname, '../../../proto/stock.proto'),
-          url: 'localhost:5001',
+          url: process.env.STOCK_GRPC_URL ?? 'localhost:5001',
         },
       },
       {

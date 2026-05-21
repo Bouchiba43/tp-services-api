@@ -1,0 +1,154 @@
+services:
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: tp-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER:     postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB:       tp_microservices
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.1
+    container_name: tp-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    networks:
+      - backend
+
+  kafka:
+    image: confluentinc/cp-kafka:7.6.1
+    container_name: tp-kafka
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+
+  stock-service:
+    image: placeholder/tp-stock-service:latest
+    container_name: tp-stock
+    restart: unless-stopped
+    networks:
+      - backend
+
+  catalog-service:
+    image: placeholder/tp-catalog-service:latest
+    container_name: tp-catalog
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB_HOST: postgres
+      DB_PORT: '5432'
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: tp_microservices
+      PORT:    '3001'
+    networks:
+      - backend
+
+  order-service:
+    image: placeholder/tp-order-service:latest
+    container_name: tp-order
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      stock-service:
+        condition: service_started
+    environment:
+      DB_HOST:        postgres
+      DB_PORT:        '5432'
+      DB_USER:        postgres
+      DB_PASS:        postgres
+      DB_NAME:        tp_microservices
+      KAFKA_BROKER:   kafka:9092
+      STOCK_GRPC_URL: stock-service:5001
+      PORT:           '3002'
+    networks:
+      - backend
+
+  notification-service:
+    image: placeholder/tp-notification-service:latest
+    container_name: tp-notification
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BROKER: kafka:9092
+    networks:
+      - backend
+
+  query-service:
+    image: placeholder/tp-query-service:latest
+    container_name: tp-query
+    restart: unless-stopped
+    environment:
+      CATALOG_URL: http://catalog-service:3001
+      ORDER_URL:   http://order-service:3002
+      PORT:        '3005'
+    networks:
+      - backend
+
+  api-gateway:
+    image: nginx:alpine
+    container_name: tp-gateway
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    volumes:
+      - ./nginx.prod.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - catalog-service
+      - order-service
+      - query-service
+    networks:
+      - backend
+
+  dashboard:
+    image: placeholder/tp-dashboard:latest
+    container_name: tp-dashboard
+    restart: unless-stopped
+    ports:
+      - '4173:80'
+    depends_on:
+      - catalog-service
+      - order-service
+      - query-service
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
+    driver: bridge

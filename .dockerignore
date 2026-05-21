@@ -1,0 +1,17 @@
+**/dist
+**/node_modules
+**/.logs
+**/.pids
+*.log
+**/.eslintrc*
+**/.prettierrc*
+**/tsconfig*.json
+**/jest.config*
+**/*.spec.ts
+**/*.test.ts
+.git
+.gitignore
+**/Dockerfile
+.dockerignore
+docker-compose*.yml
+nginx*.conf
