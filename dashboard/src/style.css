@@ -169,9 +169,9 @@ header {
 .kafka-panel    { flex-shrink: 0; margin-top: 8px; }
 
 .log-panel {
-  flex: 1;
+  flex: 2;
   margin-top: 8px;
-  min-height: 0;
+  min-height: 200px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -232,17 +232,17 @@ header {
 
 /* ---- SERVICE CARDS ---- */
 #service-cards {
-  padding: 8px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
 }
 
 .svc-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg3);
@@ -258,13 +258,13 @@ header {
 }
 
 .svc-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: #d0d8f0;
 }
 
 .svc-meta {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-dim);
   font-family: var(--mono);
 }
@@ -344,24 +344,24 @@ header {
 
 /* ---- TEST BUTTONS ---- */
 #test-buttons {
-  padding: 8px;
+  padding: 5px;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 3px;
 }
 
 .test-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 8px 12px;
+  gap: 6px;
+  padding: 4px 10px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg3);
   color: var(--text);
   cursor: pointer;
   text-align: left;
-  font-size: 12px;
+  font-size: 11px;
   transition: border-color 0.2s, background 0.2s;
   position: relative;
   overflow: hidden;
@@ -389,18 +389,19 @@ header {
 }
 
 .test-btn .btn-icon {
-  font-size: 16px;
+  font-size: 13px;
   flex-shrink: 0;
 }
 
 .test-btn .btn-label {
   flex: 1;
   font-weight: 600;
+  font-size: 11px;
   color: #d0d8f0;
 }
 
 .test-btn .btn-desc {
-  font-size: 10px;
+  font-size: 9px;
   color: var(--text-dim);
   margin-top: 1px;
 }
