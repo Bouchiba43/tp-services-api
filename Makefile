@@ -10,8 +10,8 @@ SERVICES := catalog-service stock-service order-service notification-service que
 
 up: docker-up wait-kafka build start
 	@echo ""
-	@echo "  catalog-service   →  http://localhost:3001/products"
-	@echo "  order-service     →  http://localhost:3002/orders"
+	@echo "  catalog-service   →  http://localhost:3001/products  (Swagger: /api)"
+	@echo "  order-service     →  http://localhost:3002/orders    (Swagger: /api)"
 	@echo "  query-service     →  http://localhost:3005/graphql"
 	@echo "  stock-service     →  gRPC localhost:5001"
 	@echo "  notification-svc  →  Kafka consumer (order.created)"
