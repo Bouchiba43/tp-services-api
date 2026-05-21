@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package stock;
+
+service StockService {
+  rpc CheckAndReserve (StockRequest) returns (StockResponse);
+}
+
+message StockRequest {
+  int64 productId = 1;
+  int32 quantity   = 2;
+}
+
+message StockResponse {
+  bool   available = 1;
+  string message   = 2;
+}
